@@ -7,6 +7,13 @@ class ECPoint:
         self.x = x
         self.y = y
 
+    def double_ec_points(self):
+        _curve = get_base_curve()
+        point = ellipticcurve.Point(_curve, self.x, self.y)
+        point = point.double()
+        self.x = point.x()
+        self.y = point.y()
+
 def ec_point_gen(x, y):
     point = ECPoint(x, y)
     if is_on_curve_check(point):
@@ -40,12 +47,7 @@ def add_ec_points(_a: ECPoint, _b: ECPoint):
     _c = ECPoint(_c.x(), _c.y())
     return _c
 
-def double_ec_points(point: ECPoint):
-    _curve = get_base_curve()
-    point = ellipticcurve.Point(_curve, point.x, point.y)
-    point.double()
-    point = ECPoint(point.x(), point.y())
-    return point
+
 
 def scalar_multiple(k, point: ECPoint):
     _curve = get_base_curve()
@@ -71,6 +73,12 @@ def print_ec_point(point: ECPoint):
 
 if __name__ == '__main__':
     g = base_point_g_get()
+    # вивід базової точки
+    print_ec_point(g)
+    # подвоєння точки
+    g.double_ec_points()
+    # вивід подвоєної точки
+    print_ec_point(g)
     k = secrets.randbits(256)
     d = secrets.randbits(256)
     H1 = scalar_multiple(d, g)
